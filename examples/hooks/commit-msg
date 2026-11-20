@@ -1,0 +1,29 @@
+#!/bin/sh
+# commit-msg hook: forces Conventional Commit style messages, e.g.
+#   feat: add login page
+#   fix(api): handle empty token
+#   docs: update README
+#
+# Install:  cp examples/hooks/commit-msg .git/hooks/commit-msg
+#           chmod +x .git/hooks/commit-msg
+
+MSG_FILE="$1"
+FIRST_LINE=$(head -n 1 "$MSG_FILE")
+
+# Allow merge and revert messages that Git writes for you
+case "$FIRST_LINE" in
+  Merge*|Revert*) exit 0 ;;
+esac
+
+PATTERN='^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z0-9._-]+\))?!?: .{1,72}$'
+
+if ! echo "$FIRST_LINE" | grep -E -q "$PATTERN"; then
+  echo "Bad commit message: \"$FIRST_LINE\""
+  echo ""
+  echo "Use:   <type>(optional scope): <short summary>"
+  echo "Types: feat fix docs style refactor perf test build ci chore revert"
+  echo "Example: feat(auth): add password reset email"
+  exit 1
+fi
+
+exit 0

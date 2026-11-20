@@ -1,0 +1,18 @@
+# Put this file at .github/CODEOWNERS (GitHub), CODEOWNERS (GitLab root or .gitlab/),
+# or .bitbucket/CODEOWNERS (Bitbucket Data Center add-ons).
+# When a PR touches a matching path, these people are asked to review automatically.
+# The LAST matching line wins.
+# Replace the example team and user names below with your own.
+
+# Default owners for everything
+*                       @your-org/devops-team
+
+# Infrastructure code needs the platform team
+/terraform/             @your-org/platform-team
+/k8s/                   @your-org/platform-team
+
+# CI/CD pipelines
+/.github/workflows/     @your-org/devops-team
+
+# Docs can be approved by anyone in the docs team
+/docs/                  @your-org/docs-team

@@ -1,0 +1,3 @@
+* text=auto
+examples/hooks/* text eol=lf
+*.png binary

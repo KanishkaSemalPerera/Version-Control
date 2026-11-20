@@ -1,0 +1,25 @@
+# Claude / AI tool files (keep out of GitHub)
+CLAUDE.md
+CLAUDE.local.md
+.claude/
+.cursor/
+.aider*
+
+# Secrets / keys
+.env
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Scratch
+*.log
+tmp/
+practice/

@@ -1,0 +1,50 @@
+# A starter .gitignore for a typical DevOps project.
+# Copy it into your project as ".gitignore" and delete what you do not need.
+
+# ---- Secrets (NEVER commit these) ----
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+id_rsa*
+id_ed25519*
+credentials.json
+
+# ---- Terraform ----
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!example.tfvars
+crash.log
+
+# ---- Node.js ----
+node_modules/
+npm-debug.log*
+dist/
+
+# ---- Python ----
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# ---- Java / build output ----
+target/
+build/
+*.class
+
+# ---- Logs and temp ----
+*.log
+*.tmp
+tmp/
+
+# ---- OS and editor junk ----
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp

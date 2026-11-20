@@ -1,0 +1,46 @@
+#!/bin/sh
+# pre-commit hook: stops a commit if it looks like you are committing a secret
+# or a very large file.
+#
+# Install:  cp examples/hooks/pre-commit .git/hooks/pre-commit
+#           chmod +x .git/hooks/pre-commit
+# Skip once (emergency only):  git commit --no-verify
+
+STAGED=$(git diff --cached --name-only --diff-filter=ACM)
+[ -z "$STAGED" ] && exit 0
+
+FAIL=0
+
+# 1. Block files that should never be committed
+for f in $STAGED; do
+  case "$f" in
+    *.env|.env|*.pem|*.key|id_rsa*|id_ed25519*)
+      echo "BLOCKED: '$f' looks like a secret file. Add it to .gitignore."
+      FAIL=1 ;;
+  esac
+done
+
+# 2. Look for secret-looking text inside the staged changes
+if git diff --cached -U0 | grep -E -i -q "(aws_secret_access_key|-----BEGIN (RSA|OPENSSH) PRIVATE KEY-----|password *= *['\"][^'\"]+['\"])"; then
+  echo "BLOCKED: the staged changes contain something that looks like a password or key."
+  FAIL=1
+fi
+
+# 3. Block files bigger than 5 MB
+for f in $STAGED; do
+  if [ -f "$f" ]; then
+    size=$(wc -c < "$f")
+    if [ "$size" -gt 5242880 ]; then
+      echo "BLOCKED: '$f' is bigger than 5 MB. Use Git LFS or keep it out of the repo."
+      FAIL=1
+    fi
+  fi
+done
+
+if [ "$FAIL" -ne 0 ]; then
+  echo ""
+  echo "Commit stopped by pre-commit hook. Fix the problems above and try again."
+  exit 1
+fi
+
+exit 0
